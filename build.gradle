@@ -4,6 +4,7 @@ plugins {
     id 'io.spring.dependency-management' version "$springDependencyManagementVersion"
 }
 
+
 group = 'com.telegram.maxym'
 version = '1.0.0'
 
@@ -24,12 +25,10 @@ repositories {
 dependencies {
     implementation "org.telegram:telegrambots-spring-boot-starter:$telegrambotsVersion"
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    testImplementation 'io.projectreactor:reactor-test'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'io.projectreactor:reactor-test'
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
-}
+

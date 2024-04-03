@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TelBotCurrencyWeatherApplication {
+public class TelBotApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(TelBotCurrencyWeatherApplication.class, args);
+        SpringApplication.run(TelBotApplication.class, args);
     }
 
 }
