@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: TelBOT_currency_weather
+
+
