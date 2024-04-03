@@ -1,4 +1,4 @@
-package com.telegram.maxym.telbot.bot.config;
+package com.telegram.maxym.telbot.config;
 
 import com.telegram.maxym.telbot.bot.TelegramBot;
 import org.springframework.context.annotation.Bean;
