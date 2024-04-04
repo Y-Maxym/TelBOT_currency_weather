@@ -1,6 +1,10 @@
 package com.telegram.maxym.telbot.service;
 
 import com.telegram.maxym.telbot.service.factory.ServiceFactory;
+import com.telegram.maxym.telbot.service.message.CurrencyMessageService;
+import com.telegram.maxym.telbot.service.message.DefaultMessageService;
+import com.telegram.maxym.telbot.service.message.MessageService;
+import com.telegram.maxym.telbot.service.message.WeatherMessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.context.MessageSource;
@@ -9,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,33 +31,39 @@ public class UpdateService {
 
     private MessageService messageService;
 
-    public SendMessage distribute(Update update) {
+    public List<SendMessage> distribute(Update update) {
         Message message = update.getMessage();
 
         String receivedMessage = message.getText();
         String chatId = String.valueOf(message.getChatId());
 
         switch (receivedMessage) {
-            case EXCHANGE -> setMessageService(serviceFactory.getMessageService(CurrencyService.class));
-//            case WEATHER -> setMessageService(serviceFactory.getMessageService(WeatherService.class));
+            case EXCHANGE -> setMessageService(serviceFactory.getMessageService(CurrencyMessageService.class));
+            case WEATHER -> setMessageService(serviceFactory.getMessageService(WeatherMessageService.class));
         }
 
-        String messageToSend = switch (receivedMessage) {
+        List<String> messagesToSend = switch (receivedMessage) {
             case START -> startMessage();
             case HELP -> helpMessage();
-            default -> messageService.getMessage(receivedMessage);
+            default -> messageService.getMessages(receivedMessage);
         };
 
-        return new SendMessage(chatId, messageToSend);
+        return messagesToSend.stream()
+                .map(msg -> new SendMessage(chatId, msg))
+                .toList();
     }
 
-    private String startMessage() {
+    private List<String> startMessage() {
         setMessageService(serviceFactory.getMessageService(DefaultMessageService.class));
-        return messageSource.getMessage("start", null, LocaleContextHolder.getLocale());
+        return List.of(
+                messageSource.getMessage("start", null, LocaleContextHolder.getLocale())
+        );
     }
 
-    private String helpMessage() {
+    private List<String> helpMessage() {
         setMessageService(serviceFactory.getMessageService(DefaultMessageService.class));
-        return messageSource.getMessage("help", null, LocaleContextHolder.getLocale());
+        return List.of(
+                messageSource.getMessage("help", null, LocaleContextHolder.getLocale())
+        );
     }
 }

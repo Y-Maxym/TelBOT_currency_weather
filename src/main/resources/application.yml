@@ -10,3 +10,6 @@ bot:
 
 exchange:
   url: ${exchange.url}
+
+weather:
+  url: ${weather.url}

@@ -1,4 +1,4 @@
-package com.telegram.maxym.telbot.service;
+package com.telegram.maxym.telbot.service.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.telegram.maxym.telbot.entity.Currency;
@@ -12,7 +12,7 @@ import java.util.Arrays;
 
 @Service
 @RequiredArgsConstructor
-public class ExchangeClientService {
+public class ExchangeClient {
 
     private final ObjectMapper objectMapper;
     @Value("${exchange.url}")

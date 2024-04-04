@@ -9,6 +9,8 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.List;
+
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
 
@@ -30,8 +32,8 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        SendMessage message = updateService.distribute(update);
-        sendMessage(message);
+        List<SendMessage> message = updateService.distribute(update);
+        message.forEach(this::sendMessage);
     }
 
     @SneakyThrows

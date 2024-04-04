@@ -1,6 +1,6 @@
 package com.telegram.maxym.telbot.service.factory;
 
-import com.telegram.maxym.telbot.service.MessageService;
+import com.telegram.maxym.telbot.service.message.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
