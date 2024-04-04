@@ -2,8 +2,12 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version "$springBootVersion"
     id 'io.spring.dependency-management' version "$springDependencyManagementVersion"
+    id 'application'
 }
 
+application {
+    mainClassName = 'com.telegram.maxym.telbot.TelBotApplication'
+}
 
 group = 'com.telegram.maxym'
 version = '1.0.0'

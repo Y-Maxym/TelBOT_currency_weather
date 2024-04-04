@@ -13,3 +13,4 @@ exchange:
 
 weather:
   url: ${weather.url}
+  key: ${weather.key}
