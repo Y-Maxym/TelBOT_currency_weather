@@ -1,39 +1,43 @@
 package com.telegram.maxym.telbot.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.telegram.maxym.telbot.entity.Currency;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.Arrays;
+import static java.util.Objects.isNull;
 
 @Service
 @RequiredArgsConstructor
-public class CurrencyService {
+public class CurrencyService implements MessageService {
 
-    private final ObjectMapper objectMapper;
-    @Value("${exchange.url}")
-    private String exchangeUrl;
+    private final ExchangeClientService clientService;
+    private final MessageSource messageSource;
 
-    public Currency getCurrency(String currency) {
-        String response = WebClient.create(exchangeUrl)
-                .get()
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
-
-        return extractCurrency(response, currency);
+    @Override
+    @SuppressWarnings("all")
+    public String getMessage(String receivedMessage) {
+        return switch (receivedMessage) {
+            case "/exchange" -> startMessage();
+            default -> currencyMessage(receivedMessage);
+        };
     }
 
-    @SneakyThrows
-    private Currency extractCurrency(String response, String currency) {
-        Currency[] currencyEntities = objectMapper.readValue(response, Currency[].class);
-        return Arrays.stream(currencyEntities)
-                .filter(currencyEntity -> currencyEntity.getCurrency().equals(currency))
-                .findFirst()
-                .orElse(null);
+    private String currencyMessage(String requestedCurrency) {
+        Currency currency = clientService.getCurrency(requestedCurrency);
+        if (isNull(currency)) return "Unknown currency";
+
+        return messageSource.getMessage("currency.response",
+                new Object[]{
+                        currency.getBaseCurrency(),
+                        currency.getCurrency(),
+                        currency.getBuy(),
+                        currency.getSale()
+                }, LocaleContextHolder.getLocale());
+    }
+
+    private String startMessage() {
+        return messageSource.getMessage("currency.start", null, LocaleContextHolder.getLocale());
     }
 }
