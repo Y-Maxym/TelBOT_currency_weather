@@ -12,6 +12,7 @@ public class WeatherRequest {
     private String city;
     private String lang;
     private String days;
+    private String hour;
 
     private WeatherRequestCommand command;
 
@@ -29,6 +30,10 @@ public class WeatherRequest {
 
         if (days != null && !days.isEmpty()) {
             stringBuilder.append("&").append("days=").append(days);
+        }
+
+        if (hour != null && !hour.isEmpty()) {
+            stringBuilder.append("&").append("hour=").append(hour);
         }
 
         return stringBuilder.toString();

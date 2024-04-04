@@ -29,6 +29,7 @@ public class RequestService {
             case "/city" -> cityCommand();
             case "/lang" -> langCommand();
             case "/days" -> daysCommand();
+            case "/hour" -> hourCommand();
             default -> setParam(command);
         };
     }
@@ -54,11 +55,19 @@ public class RequestService {
         );
     }
 
+    private List<String> hourCommand() {
+        weatherRequest.setCommand(HOUR);
+        return List.of(
+                messageSource.getMessage("weather.request.hour", null, LocaleContextHolder.getLocale())
+        );
+    }
+
     private List<String> setParam(String param) {
         switch (weatherRequest.getCommand()) {
             case CITY -> weatherRequest.setCity(param);
             case LANGUAGE -> weatherRequest.setLang(param);
             case DAYS -> weatherRequest.setDays(param);
+            case HOUR -> weatherRequest.setHour(param);
         }
         return List.of(
                 messageSource.getMessage("weather.request.next", null, LocaleContextHolder.getLocale())
